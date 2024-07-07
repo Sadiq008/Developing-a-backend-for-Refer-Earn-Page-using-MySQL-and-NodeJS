@@ -12,10 +12,6 @@ const prisma = new PrismaClient();
 app.use(express.json());
 
 // Endpoint to save referral data
-/* app.get("/api/referrals", (req, res) => {
-  res.send("Hi from Express!");
-}); */
-
 app.post("/api/referrals", async (req, res) => {
   const { referrerName, referrerEmail, refereeName, refereeEmail, courseName } =
     req.body;
@@ -49,6 +45,17 @@ app.post("/api/referrals", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to save referral data" });
+  }
+});
+
+// Endpoint to fetch all referral data
+app.get("/api/referrals", async (req, res) => {
+  try {
+    const referrals = await prisma.referral.findMany();
+    res.status(200).json(referrals);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch referral data" });
   }
 });
 
